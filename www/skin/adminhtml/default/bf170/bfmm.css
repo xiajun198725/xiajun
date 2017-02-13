@@ -1,0 +1,27 @@
+.header {
+    background: #191717;
+}
+.header-top {
+    border-bottom: 1px solid #000000;
+}
+.center {
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+.login-container {
+    background: #FFFFFF;
+	padding-left: 0;
+}
+.login-container .center {
+    background: #171717;
+	height: 60px;
+}
+.login-form {
+    background: #EFEFEF;
+}
+
+/* Order item renderer */
+.order-tables td .qty-table{
+	min-width: 75px;
+}

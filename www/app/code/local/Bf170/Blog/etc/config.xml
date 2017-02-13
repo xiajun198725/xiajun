@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.bf170.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@bf170.com so we can send you a copy immediately.
+ * 
+ -->
+<config>
+    <modules>
+        <Bf170_Blog>
+            <version>1.0.0</version>
+        </Bf170_Blog>
+    </modules>
+	<global>
+        <helpers>
+            <blog>
+                <class>Bf170_Blog_Helper</class>
+            </blog>
+		</helpers>
+        <blocks>
+            <blog>
+                <class>Bf170_Blog_Block</class>
+            </blog>
+        </blocks>
+        <models>
+            <blog>
+                <class>Bf170_Blog_Model</class>
+				<resourceModel>blog_mysql4</resourceModel>
+            </blog>
+            <blog_mysql4>
+                <class>Bf170_Blog_Model_Mysql4</class>
+                <entities>
+                    <article>
+                        <table>blog_article</table>
+                    </article>
+                </entities>
+            </blog_mysql4>
+        </models>
+		<resources>
+            <blog_setup>
+                <setup>
+                    <module>Bf170_Blog</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </blog_setup>
+            <blog_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </blog_write>
+            <blog_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </blog_read>
+        </resources>
+		<events/>
+    </global>
+	<frontend>
+		<routers>
+			<blog>
+				<use>standard</use>
+				<args>
+					<module>Bf170_Blog</module>
+					<frontName>blog</frontName>
+				</args>
+			</blog>
+		</routers>
+		<layout>
+			<updates>
+				<blog module="Bf170_Blog">
+					<file>blog.xml</file>
+				</blog>
+			</updates>
+		</layout>
+	</frontend>
+	<adminhtml>
+		<!-- 相应的adminhtml定义挪到了adminhtml.xml -->
+	</adminhtml>
+	<admin>
+        <routers>
+            <blog_adminhtml>
+                <use>admin</use>
+                <args>
+                    <module>Bf170_Blog_Adminhtml</module>
+                    <frontName>blog_adminhtml</frontName>
+                </args>
+            </blog_adminhtml>
+        </routers>
+    </admin>
+</config>

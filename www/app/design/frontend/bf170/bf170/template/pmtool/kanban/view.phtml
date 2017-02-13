@@ -1,0 +1,267 @@
+<?php
+/*
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ */
+?>
+<?php 
+	$kanban = $this->getKanban();
+	$kanbanUser = $this->getKanbanUser();
+	$processList = $this->getProcessList();
+	$buzhoubanduan = $this->getDelBuzhou();
+	$buzhoutijiaUrl = Mage::getUrl('pmtool/kanban/addbuzhou');
+	$buzhouDelUrl = Mage::getUrl('pmtool/kanban/delbuzhou');
+	$cardcommentadd = Mage::getUrl('pmtool/kanban/addcardcomment');
+	$cardMessageadd = Mage::getUrl('pmtool/kanban/addkapian');
+?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php $kanbancustomers = Mage::helper('pmtool/card_cardMessage')->getKanbanUsers($kanban->getData('tag_info'));?>
+<div class="page-title pmtool-kanban-view-title">
+    <h1 style="float:left;width:95%;"><?php echo $kanban->getData('name'); ?></h1>
+    <button id="kanban_kapian"><img src="<?php echo $this->getSkinUrl('images/baocun.png');?>"</button>
+</div>
+<?php if(!!$kanban->getData('description')): ?>
+<h6>详情：<?php echo $kanban->getData('description'); ?></h6>
+<?php endif; ?>
+
+<ol class="pmtool-process-list" id="pmtool-process-list">
+	<?php $processCounter = 0; ?>
+	<?php /******************************************对每个看板步骤的操作*****************************************************************************/?>
+	<?php foreach($processList as $process): ?>
+	<?php 
+		$processCounter ++;
+	?>
+	<div id="process-id-<?php echo $process->getId(); ?>" class="pmtool-card-list">
+		<div class="pmtool-process-title" id="pmtool-process-title">
+			<table>
+				<tr>
+					<th class = 'buttontijiao_buzhou_del'><h3><?php echo $process->getData('name'); ?></h3><th>
+					<?php if($buzhoubanduan == true):?>
+					<th class = 'buttontijiao_buzhou_delect'><button title="卡片修改" type="button" id="kapian-tianjia-<?php echo $process->getId(); ?>"><img src="<?php echo $this->getSkinUrl('images/2.png');?>"/></button></th>
+					<th class = 'buttontijiao_buzhou_delect'><button title="删除" type="button" id="buzhou-del-<?php echo $process->getId(); ?>"><img src="<?php echo $this->getSkinUrl('images/1.png');?>"/></button></th>
+					<input class = 'process_buzhou' id ="process-buzhou-id-<?php echo $process->getId(); ?>" type='text' value = '<?php echo $process->getId();?>'/>
+					<?php endif;?>
+				</tr>
+			</table>
+		</div>
+		<script type="text/javascript">
+				jQuery('#buzhou-del-<?php echo $process->getId(); ?>').click(function(){
+				var buzhou_Id = document.getElementById('process-buzhou-id-<?php echo $process->getId(); ?>').value;
+				jQuery.ajax({
+					url:"<?php echo $buzhouDelUrl;?>",
+					data:{"kanban_id":<?php echo $kanban->getId();?>,"buzhou_Id":buzhou_Id},
+					type:"POST",
+					dataType:"json",
+					success:function(result){
+						alert(result.status);
+						window.location.reload(); 
+							}
+						});
+			});
+		</script>
+<?php /******************************************卡片的展示*****************************************************************************/?>
+		<?php foreach($process->getData('card_list') as $card): ?>
+			<script type="text/javascript">
+			jQuery(document).ready(function() {				
+				var card<?php echo $card->getId(); ?> = new TaskCard(<?php echo  $card->getJsonInfo();?>);
+			});
+			</script>
+			<?php /****************************************卡片的倒计时**************************************************************/?>
+			<?php $kapianTimes = Mage::helper('pmtool')->getTimesValues($card->getData('due_at'));?>
+			<script type="text/javascript">
+				var interval = 1000; 
+				function ShowCountDown(year,month,day,divname) 
+				{ 
+				var now = new Date(); 
+				var endDate = new Date(year, month-1, day); 
+				var leftTime=endDate.getTime()-now.getTime(); 
+				var leftsecond = parseInt(leftTime/1000); 
+				//var day1=parseInt(leftsecond/(24*60*60*6)); 
+				var day1=Math.floor(leftsecond/(60*60*24)); 
+				var hour=Math.floor((leftsecond-day1*24*60*60)/3600); 
+				var minute=Math.floor((leftsecond-day1*24*60*60-hour*3600)/60); 
+				var second=Math.floor(leftsecond-day1*24*60*60-hour*3600-minute*60);
+				var cc = document.getElementById(divname); 
+				cc.innerHTML = "距"+year+"年"+month+"月"+day+"日："+day1+"天"+hour+"小时"+minute+"分"+second+"秒"; 
+				} 
+				window.setInterval(function(){ShowCountDown(<?php echo $kapianTimes['y'];?>,<?php echo $kapianTimes['m'];?>,<?php echo $kapianTimes['d'];?>,"wanchengshijian<?php echo $card->getId();?>");}, interval); 
+			</script>
+		<?php /***************************************卡片修改操作********************************************************/ ?>
+			<div id="card_detail_content-<?php echo $card->getId();?>" style="background-color:blue;">
+			
+			</div>
+			<script type="text/javascript">
+			jQuery(document).ready(function (){
+			jQuery("#card-content-<?php echo $card->getId();?>").click(function() {
+				var jsoninfo = <?php echo  $card->getJsonInfo($kanban->getId());?>;			
+				var kbPopView = new KBPopView({
+					"name":jsoninfo.name,
+					"currentId":"card_detail_content-<?php echo $card->getId();?>",
+					"bewrite":jsoninfo.description,
+					"customer":jsoninfo.customer_name,
+					"kapian_taginfo":jsoninfo.tag_kapian,
+					"kapian_taginfos":jsoninfo.kapian_taginfo,
+					"due_at":jsoninfo.due_at,
+					"comment_info":jsoninfo.comment_info,
+					"priority":jsoninfo.priority
+				});
+			jQuery.fancybox('#card_detail_content-<?php echo $card->getId();?>');
+				});
+			});	
+			</script>
+		<?php endforeach; ?>
+	</div>
+<?php /************************************************卡片的添加*****************************************************************************/?>
+	<div  id="card_tianjia_content-<?php echo $process->getId();?>" class="kapian_tianjia">
+		<br/>
+		<h2 class="h2_kapian">卡片的名称:<input class="input_kapian" id="kapian-<?php echo $process->getId();?>" value="请输入卡片的名称"/></h2>
+		<h2 class="h2_kapian">卡片的描述:<textarea class="input_kapian_textarea" id="kapian-miaoshu-<?php echo $process->getId();?>" value="请输入对卡片的描述"/></textarea></h2>
+		<h2 class="h2_kapian">到期的时间:<input class="input_kapian" id="kapian-time-<?php echo $process->getId();?>" onClick="WdatePicker()"/></h2>
+		<h2 class="h2_kapian_biaoqiao">卡片优先级:
+			<select class="kapiantype_select" id="kapianleixing-<?php echo $process->getId();?>">
+			<?php $kanbanstatus = Mage::helper("pmtool/card")->getPriorityValues();?>
+				<?php foreach($kanbanstatus as $kanbanstatusId => $kanbanstatu):?>
+					<option value = '<?php echo $kanbanstatusId; ?>'class="kanbantype_option"><?php echo $kanbanstatu; ?></option>
+				<?php endforeach;?>
+			</select>
+		</h2>
+		<h2 class="h2_kapian_biaoqiao">卡片状态:
+			<select class="kapiantype_select" id="kapianzhuangtai-<?php echo $process->getId();?>">
+			<?php $kanbanstatus = Mage::helper("pmtool/card")->getStatusValues();?>
+				<?php foreach($kanbanstatus as $kanbanstatusId => $kanbanstatu):?>
+					<option value = '<?php echo $kanbanstatusId; ?>'class="kanbantype_option"><?php echo $kanbanstatu; ?></option>
+				<?php endforeach;?>
+			</select>
+		</h2>
+		<br/>
+		<br class="kapiancustomernames"/>
+		<div class="kapianscustomernames">
+			<?php foreach($kanbancustomers as $kanbancustomerId=>$kanbancustomer):?>
+			<div class = "kapiancustomername"><input name="<?php echo $customerId;?>" type="checkbox" value="<?php echo $kanbancustomerId;?>"/><?php echo $kanbancustomer;?></div>
+			<?php endforeach;?>
+		</div>
+		<br/>
+		<br/>
+		<br/>
+		<button class="buttontijiao" title="保存卡片" type="button" id="member-show-kapian-<?php echo $process->getId();?>"><img src="<?php echo $this->getSkinUrl('images/tijiao.png');?>"/></button>
+	</div>
+	<script type="text/javascript">
+	jQuery(document).ready(function (){
+		jQuery("#kapian-tianjia-<?php echo $process->getId();?>").click(function(){
+			jQuery.fancybox('#card_tianjia_content-<?php echo $process->getId();?>');
+			});
+		});
+	jQuery(document).ready(function (){
+		jQuery("#member-show-kapian-<?php echo $process->getId();?>").click(function(){
+			var kanbianId = '<?php echo $kanban->getId();?>';
+			var buzhouId = '<?php echo $process->getId();?>';
+			var kapianName = document.getElementById("kapian-<?php echo $process->getId();?>").value;
+			var kapianMiaoshu = document.getElementById("kapian-miaoshu-<?php echo $process->getId();?>").value;
+			var lateTime = document.getElementById('kapian-time-<?php echo $process->getId();?>').value;
+			var kapianType = document.getElementById('kapianleixing-<?php echo $process->getId();?>').value;
+			var kapianStatus = document.getElementById('kapianzhuangtai-<?php echo $process->getId();?>').value;
+			var customer = jQuery("input[type='checkbox']:checked") ;
+			var customers = "";
+			for(var i = 0; i<customer.length; i++){
+			  customers += jQuery(customer[i]).val() + ",";
+			}
+			if(kanbianId == null){
+				alert("无法进行卡片的添加!");
+				}
+			if(kapianName == "请输入卡片的名称" || kapianName == null){
+				alert("请填入卡片的名称!");
+				}
+			if(kapianMiaoshu == "请输入对卡片的描述" || kapianMiaoshu == null){
+				alert("请填入对卡片的描述!");
+				}
+			jQuery.ajax({
+				url:"<?php echo $cardMessageadd;?>",
+				data:{"kanbianId":kanbianId,"kapianName":kapianName,"kapianMiaoshu":kapianMiaoshu,"lateTime":lateTime,"kapianType":kapianType,"kapianStatus":kapianStatus,"buzhouId":buzhouId,"customerId":customers},
+				type:'POST',
+				dataType:'json',
+				success:function(result){
+					alert(result.status);
+					window.location.reload(); 
+				}
+				
+			});
+		});
+	});
+	</script>
+	<?php endforeach;?>
+</ol>
+<?php /******************************************对看板步骤的添加与看板步骤的保存**************************************************************************/?>
+<p>
+	<?php if(Mage::helper('pmtool')->getCoustomerData($kanban->getId()) == Bf170_PMTool_Model_Kanban_User::TYPE_OWNER):?>
+	<div class="add_kapian_zhuangtai">
+		<button class="button" title="添加步骤" type="button" id="member_show_tianjia_buzhou"><img src="<?php echo $this->getSkinUrl('images/tianjiakanban.png');?>"/></button>
+	</div>
+	<?php endif;?>
+	<div id="member_show_tianjias_buzhou" class="members_show_tianjias_buzhou" style = "position:center" >
+		 <div>
+		 	<h2>步骤添加:<input type="text" name="name" class="shurubuzhou" id="buzhoumingzi_buzhou"/></h2>
+		 	<h2 class="shurubuzhou_id">看板id地址:<input type="text" name="name" class="shurubuzhou" id="buzhoumingzi_buzhou_id" value="<?php echo $kanban->getId();?>"/></h2>
+		 	<button class="buttontijiao_buzhou" title="保存步骤" type="button" id="member_show_baocun_buzhou"><img src="<?php echo $this->getSkinUrl('images/tijiao.png');?>"/></button>
+		 </div>
+	</div>
+</p>
+<script type="text/javascript">
+	jQuery('#member_show_tianjia_buzhou').click(function(){
+		jQuery.fancybox('#member_show_tianjias_buzhou');
+	});
+	jQuery('#member_show_baocun_buzhou').click(function(){
+		var buzhou_Name = document.getElementById("buzhoumingzi_buzhou").value;
+		var kanban_Id = document.getElementById("buzhoumingzi_buzhou_id").value;
+		jQuery.ajax({
+			url:"<?php echo $buzhoutijiaUrl;?>",
+			data:{"name":buzhou_Name,"kanbanid":kanban_Id},
+			type:"POST",
+			dataType:"json",
+			success:function(result){
+				alert(result.status);
+				window.location.reload(); 
+					}
+				});
+	});
+</script>
+<?php /*******************************对整个页面进行遍历,重新保存卡片的id在每个步骤的位置**********************************************************/?>
+<?php 
+$addressChenge = Mage::getUrl('pmtool/kanban/addressChenge');
+?>
+<script type="text/javascript">
+	jQuery('#kanban_kapian').click(function(){
+		var buzhou = jQuery('.pmtool-card-list');
+		var buzhous = new Array();
+		var allcards = new Array();
+		for(var i = 0; i < buzhou.length; i++) {
+			var supDiv = buzhou[i];
+			buzhous.push(buzhou[i].id);
+			var divs = supDiv.getElementsByTagName("div");
+			var cards = new Array();
+			for(var j = 0; j < divs.length;j++){
+				var uid = divs[j].id;
+				if (uid.substring(0,7) == 'card-id') {
+					cards.push(divs[j].id);
+					}
+			}
+			allcards.push(cards);	
+		}
+		jQuery.ajax({
+			url:"<?php echo $addressChenge;?>",
+			data:{"buzhouaddress":buzhous,"cardaddress":allcards,"kanbanid":<?php echo $kanban->getId();?>},
+			type:"POST",
+			dataType:"json",
+			success:function(result){
+			alert(result.status);
+			window.location.reload(); 
+				}
+			});
+	});
+</script>

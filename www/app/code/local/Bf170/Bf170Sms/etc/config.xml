@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.bf170.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@bf170.com so we can send you a copy immediately.
+ * 
+ -->
+
+<config>
+	<modules>
+		<Bf170_Bf170Sms>
+		   <version>1.0.0</version>
+		</Bf170_Bf170Sms>
+	</modules>
+	<global>
+		<blocks>
+			<bf170sms>
+				<class>Bf170_Bf170Sms_Block</class>
+			</bf170sms>
+		</blocks>
+		<helpers>
+			<bf170sms>
+				<class>Bf170_Bf170Sms_Helper</class>
+			</bf170sms>
+		</helpers>
+		<models>
+            <bf170sms>
+                <class>Bf170_Bf170Sms_Model</class>
+                <resourceModel>bf170sms_mysql4</resourceModel>
+            </bf170sms>
+            <bf170sms_mysql4>
+                <class>Bf170_Bf170Sms_Model_Mysql4</class>
+                <entities>
+                    <record>
+                        <table>bf170sms_record</table>
+                    </record>
+                </entities>
+            </bf170sms_mysql4>
+        </models>
+        <resources>
+            <bf170sms_setup>
+                <setup>
+                    <module>Bf170_Bf170Sms</module>
+                </setup>
+            </bf170sms_setup>
+        </resources>
+	</global>
+	<frontend>
+		<routers>
+			<bf170sms>
+				<use>standard</use>
+				<args>
+					<module>Bf170_Bf170Sms</module>
+					<frontName>bf170sms</frontName>
+				</args>
+			</bf170sms>
+		</routers>
+	</frontend>
+	<admin>
+        <routers>
+            <bf170sms_adminhtml>
+                <use>admin</use>
+                <args>
+                    <module>Bf170_Bf170Sms_Adminhtml</module>
+                    <frontName>bf170sms_adminhtml</frontName>
+                </args>
+            </bf170sms_adminhtml>
+        </routers>
+    </admin>
+</config>
+	

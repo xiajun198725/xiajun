@@ -1,0 +1,156 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category	design
+ * @package	 base_default
+ * @copyright   Copyright (c) 2012 Magento Inc. (http://www.magentocommerce.com)
+ * @license	 http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+	$sendLoginSmsAjaxUrl = $this->getUrl('customer/account/sendLoginSmsAjax');
+	$smsCountdown = Bf170_Bf170Sms_Helper_Data::DEFAULT_SMS_COUNTDOWN;
+?>
+<div class="account-login clearer">
+	<div class="page-title">
+		<h1><?php echo $this->__('Login') ?></h1>
+	</div>
+	<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+	<?php /* Extensions placeholder */ ?>
+	<?php echo $this->getChildHtml('customer.form.login.extra')?>
+	<form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form">
+		<?php echo $this->getBlockHtml('formkey'); ?>
+		<div class="registered-users grid12-6">
+			<div class="content">
+				<ul class="form-list">
+					<li>
+						<label for="telephone" class="required"><em>*</em><?php echo $this->__('鎵嬫満鍙风爜') ?></label>
+						<div class="input-box">
+							<input type="text" name="login[telephone]" value="" id="telephone" class="input-text required-entry validate-number validate-length minimum-length-11 maximum-length-11" title="<?php echo $this->__('鎵嬫満鍙风爜') ?>" />
+						</div>
+						<i>浠呭～鏁板瓧锛岃鍕夸娇鐢ㄧ┖鏍�/杩炲瓧绗︾瓑瀛楃</i>
+					</li>
+					<li>
+						<label for="pass" class="required"><em>*</em><?php echo $this->__('Password') ?></label>
+						<div class="input-box">
+							<input type="password" name="login[password]" class="input-text required-entry validate-password" id="pass" title="<?php echo $this->__('Password') ?>" />
+						</div>
+					</li>
+					<?php echo $this->getChildHtml('form.additional.info'); ?>
+				</ul>
+				<p class="required"><?php echo $this->__('* Required Fields') ?></p>
+			</div>
+			<div class="buttons-set">
+				<a id="forgot_password_link" href="#" class="f-left"><?php echo $this->__('Forgot Your Password?') ?></a>
+				<button type="submit" class="button" title="<?php echo $this->__('Login') ?>" name="send" id="send2"><span><span><?php echo $this->__('Login') ?></span></span></button>
+			</div>
+			<div id="forgot_password_message_container" style="display: none;">
+				<br/>
+				<p>璇锋偍鍦ㄤ互涓婅〃鏍间腑濉啓鎮ㄧ殑鐧诲綍鎵嬫満鍙风爜銆傜郴缁熷皢鍚戞偍鐨勭櫥褰曟墜鏈哄彂閫佺煭淇￠獙璇佺爜锛屾偍鍙互浣跨敤璇ョ煭淇￠獙璇佺爜浣滀负瀵嗙爜杩涜鐧诲綍銆傜煭淇￠獙璇佺爜涓�娆℃湁鏁堛�傜櫥褰曞悗璇锋偍鍦ㄢ�滆处鎴蜂俊鎭�濅笅锛屼慨鏀规偍鐨勫瘑鐮�</p>
+				<div class="buttons-set">
+					<p style="display: none;" id="forgot_password_ajax_submit_message_container"></p>
+					<button class="button" title="鍙戦�佺煭淇�" type="button" id="forgot_password_ajax_submit"><span><span>鍙戦�佺煭淇�</span></span></button>
+				</div>
+				<div class="clear"></div>
+				<div style="display: none;" id="forgot_password_ajax_submit_message">
+					<span class="right"><img width="28" src="<?php echo $this->getSkinUrl('images/loader.gif'); ?>">  璇风◢鍊欍�傘�傘��</span>
+				</div>
+			</div>
+		</div>
+	</form>
+	
+	<script type="text/javascript">
+	//<![CDATA[
+		var loginForm = new VarienForm('login-form', true);
+
+		var countdownInSeconds = <?php echo $smsCountdown; ?>;
+		var isCountdownStarted = false;
+		jQuery(document).ready(function (){
+			jQuery("#forgot_password_link").click(function (){
+				jQuery("#forgot_password_message_container").toggle();
+			});
+			jQuery("#forgot_password_ajax_submit").click(function (){
+				submitSmsAjax();
+			});
+		});
+
+		var submitSmsAjax = function (){
+			<?php // 涓嶈楠岃瘉瀵嗙爜 ?>
+			jQuery("#pass").hide();
+			if(!loginForm.validator || !loginForm.validator.validate()){
+				jQuery("#pass").show();
+				return false;
+			}
+			jQuery("#pass").show();
+			
+			<?php // 閿佸睆 ?>
+			jQuery("#forgot_password_ajax_submit_message_container").hide();
+			jQuery('#forgot_password_ajax_submit').attr('disabled', 'disabled').hide();
+			jQuery('#forgot_password_ajax_submit_message').show();
+			jQuery.ajax( {
+				url: "<?php echo $sendLoginSmsAjaxUrl; ?>", 
+				data: jQuery("#login-form").serialize(),  
+				type: 'post',  
+				cache: false,  
+				dataType: 'json',  
+				success:function(jsonResponse) {
+					<?php // 瑙ｉ櫎閿佸睆 ?> 
+					if(jsonResponse.status == 0){
+						jQuery("#forgot_password_ajax_submit_message_container").html('鐭俊鍙戦�佹垚鍔燂紝鎮ㄥ彲浠ヤ娇鐢ㄨ鐭俊楠岃瘉鐮佷綔涓哄瘑鐮佽繘琛岀櫥褰曘��<br/>閲嶅彂鐭俊锛�<span id="forgot_password_ajax_submit_countdown"></span>');
+						jQuery('#forgot_password_ajax_submit_message').hide();
+						smsResendCountdown();
+					}else{
+						if(!!jsonResponse.message){
+							jQuery("#forgot_password_ajax_submit_message_container").html(jsonResponse.message);
+						}else{
+							jQuery("#forgot_password_ajax_submit_message_container").html('鐭俊鍙戦�佸け璐�');
+						}
+						jQuery("#forgot_password_ajax_submit_message_container").show();
+						jQuery('#forgot_password_ajax_submit').removeAttr('disabled').show();
+						jQuery('#forgot_password_ajax_submit_message').hide();
+					}
+				},  
+				error : function() {
+					<?php // 瑙ｉ櫎閿佸睆 ?> 
+					jQuery("#forgot_password_message_container").html("鏁版嵁浼犺緭寮傚父锛岃鍒锋柊鏈〉");
+					jQuery('#forgot_password_ajax_submit').removeAttr('disabled').show();
+					jQuery('#forgot_password_ajax_submit_message').hide();
+				}  
+			});
+		}
+
+		var smsResendCountdown = function () {
+			countdownInSeconds --;
+			if(countdownInSeconds > 0){
+				jQuery("#forgot_password_ajax_submit_message_container").show();
+				jQuery('#forgot_password_ajax_submit').attr('disabled', 'disabled').hide();
+				jQuery("#forgot_password_ajax_submit_countdown").html(countdownInSeconds + "s");
+				setTimeout (smsResendCountdown, 1000);
+				isCountdownStarted = true;
+			}else{
+				countdownInSeconds = <?php echo $smsCountdown; ?>;
+				isCountdownStarted = false;
+				jQuery("#forgot_password_ajax_submit_message_container").hide();
+				jQuery("#forgot_password_ajax_submit").removeAttr('disabled').show();
+			}
+		}
+	//]]>
+	</script>
+</div>

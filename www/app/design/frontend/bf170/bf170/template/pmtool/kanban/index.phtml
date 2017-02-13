@@ -1,0 +1,176 @@
+<?php
+/*
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ * 
+ */
+?>
+<?php 
+	$kanbanCollection = $this->getKanbanCollection();
+	$kanbanListSizeLimit = 20;
+	$kanbantijiaUrl = Mage::getUrl('pmtool/kanban/addkanban');
+?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div style= "height:500px;">
+	<div class="page-title pmtool-kanban-list-title">
+	    <h1><img src = "<?php echo $this->getSkinUrl('images/mykanban.jpg');?>"/></h1>
+	</div>
+	<?php if(!count($kanbanCollection)): ?>
+	<p>您还没有相关看板</p>
+	<?php else: ?>
+	<div class="pmtool-kanban-list">
+		<ol>
+		<?php $itemCounter = 0; ?>
+		<?php foreach($kanbanCollection as $kanban): ?>
+			<?php 
+				$itemCounter ++;
+				$kanbanStatusClass = "";
+			?>
+			<a href="<?php echo Mage::helper('pmtool')->getKanbanViewUrl($kanban->getId()); ?>">
+				<li class="kanban-item <?php echo $kanbanStatusClass; ?> <?php echo ($itemCounter > $kanbanListSizeLimit)?"kanban-item-additional":""?>">
+				    <h3 style="float:left;">&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</h3>
+					<h3><?php echo $kanban->getData('name'); ?></h3>
+					<h3 style="float:left;">人员身份:<?php echo $kanban->getUserTypeLabel();?></h3><h3 style="float:left;">&emsp;&emsp;</h3>
+					<h3>创建时间:<?php echo substr($kanban->getData('created_at'),0,10);?></h3>
+					<h3 style="float:left;">管理人员:<?php echo Mage::helper('pmtool')->getCustomerValues($kanban);?></h3>
+					<h3 style="float:left;">&emsp;&emsp;&emsp;</h3>
+					<?php $stuts = Mage::helper('pmtool')->getStatueValues($kanban);?>
+					<?php foreach($stuts as $stut):?>
+					<h3 >看板状态:<?php echo $stut;?></h3>
+					<?php endforeach;?>
+					<div>
+        					<div class="kanban_xiangqing_biaoti">
+        						<h3>看板详情</h3>
+        					</div>
+        					<div  class="kanban_xiangqing"><?php echo $kanban->getData('description');?></div>
+        			</div>
+        					<?php $kanbanNumberUser = Mage::helper('pmtool')->getUserValues($kanban->getData('tag_info'));?>
+            				<?php foreach($kanbanNumberUser as $user):?>
+            					<div class="kanban_number_user">&emsp;&emsp;<?php echo $user;?></div>
+            				<?php endforeach;?>
+    				
+				</li>
+			</a>
+		<?php endforeach; ?>
+		<?php if($itemCounter > $kanbanListSizeLimit): ?>
+			<div class="buttons-set">
+				<button class="button" title="显示全部看板" type="button" id="member_show_more"><span><span>显示全部看板</span></span></button>
+				<button class="button" title="显示部分看板" type="button" id="member_show_less" style="display: none;"><span><span>显示部分看板</span></span></button>
+			</div>
+		<?php endif; ?>
+		</ol>
+	</div>
+	<?php endif; ?>
+</div>
+<div style="clear:both"></div>
+	<p>
+		<?php //这里需要对登陆用户的权限做处理--是否拥有添加看板的权限?>
+		<div class="tianjiankanban">
+			<button class="button" title="添加看板" type="button" id="member_show_tianjia"><img src="<?php echo $this->getSkinUrl('images/tianjiakanban.png');?>"/></button>
+		</div>
+		<div id="member_show_tianjias" class="members_show_tianjias" style = "position:center" >
+	    	<div class="kanbanbuju">
+				<h1><span>看板创建</span><h1>
+				<h2>看板名称:<input type="text" name="name" class="shurukanban" id="kanbanmingzi"/></h2>
+				<h2>看板详情:<textarea name="description" class="shurukanbantwo" id="kanbanxiangqing"/></textarea></h2>
+				<h2 class="kanbanstatus">看板状态:
+					<select class="kanbanstatus_select" id="kanbancuangtai">
+					<?php $kanbanstatus = Mage::helper("pmtool/kanban")->getStatusValues();?>
+						<?php foreach($kanbanstatus as $kanbanstatusId => $kanbanstatu):?>
+							<option value = '<?php echo $kanbanstatusId; ?>'class="kanbanstatus_option"><?php echo $kanbanstatu; ?></option>
+						<?php endforeach;?>
+					</select>
+				</h2>
+				<h2 class="kanbantype">看板类型:
+					<select class="kanbantype_select" id="kanbanleixing">
+					<?php $kanbanstatus = Mage::helper("pmtool/kanban")->getTypeValues();?>
+						<?php foreach($kanbanstatus as $kanbanstatusId => $kanbanstatu):?>
+							<option value = '<?php echo $kanbanstatusId; ?>'class="kanbantype_option"><?php echo $kanbanstatu; ?></option>
+						<?php endforeach;?>
+					</select>
+				</h2>
+				<h2 class="kanbanbiaoqian">
+					<select class="kanbanbiaoqian_select" id="kanbanbiaoqian">
+					<?php $kanbanLabels = Mage::helper("pmtool/kanban")->getLabelValues();?>
+						<?php foreach($kanbanLabels as $kanbanLabelsId => $kanbanLabel):?>
+							<option value = '<?php echo $kanbanLabelsId; ?>'class="kanbanbiaoqian_option"><?php echo $kanbanLabel; ?></option>
+						<?php endforeach;?>
+					</select>
+				</h2>
+				<h2 class="kanbanbiaoqian">
+				<div class="kanbanrenyuan_select">
+					<?php $customerNames = Mage::helper('pmtool/kanban_user')->getCustomersValues();?>
+					<?php foreach($customerNames as $customerId=>$customer):?>
+					 	<div class = "customername"><input name="<?php echo $customerId;?>" type="checkbox" value="<?php echo $customerId;?>"/><?php echo $customer;?></div>
+					<?php endforeach;?> 
+				</div>
+				</h2>
+				<br/>
+				<br/>
+				<br/>
+				<h2 class="quxiaofudong">创建人员:<input type="text" name="customername" class="shurukanban" value="<?php echo Mage::getSingleton('customer/session')->getCustomer()->getFirstname();?>" readonly id="customername"/></h2>
+				<br/>
+				<br/>
+				<br/>
+				<button class="buttontijiao" title="保存看板" type="button" id="member_show_baocun"><img src="<?php echo $this->getSkinUrl('images/tijiao.png');?>"/></button>
+		</div>
+	</div>
+	</p>
+<hr/>
+<script type="text/javascript">
+	jQuery(document).ready(function (){
+		jQuery('#member_show_more').click(function(){
+			jQuery(this).hide();
+			jQuery('.pmtool-kanban-list li.kanban-item-additional').show();
+			jQuery('#member_show_less').show();
+		});
+		jQuery('#member_show_less').click(function(){
+			jQuery(this).hide();
+			jQuery('.pmtool-kanban-list li.kanban-item-additional').hide();
+			jQuery('#member_show_more').show();
+		});
+		jQuery('#member_show_tianjia').click(function(){
+			jQuery.fancybox('#member_show_tianjias');
+		});
+		jQuery('#member_show_baocun').click(function(){
+			var kenbanName = document.getElementById("kanbanmingzi").value;
+			var kenbanrecord = document.getElementById("kanbanxiangqing").value;
+			var kanbanstatus = document.getElementById("kanbancuangtai").value;
+			var kenbantype = document.getElementById("kanbanleixing").value;
+			var kenbanlabel = document.getElementById("kanbanbiaoqian").value;
+			var customer = jQuery("input[type='checkbox']:checked") ;
+			var customers = "";
+			for(var i = 0; i<customer.length; i++){
+			  customers += jQuery(customer[i]).val() + ",";
+			}
+			if(kenbanName == ""){
+				jQuery("#kanbanmingzi").val("这里不能为空!!!!!!!!!!");
+				return false;
+			}
+			if(kenbanrecord == ""){
+				jQuery("#kanbanxiangqing").val("这里必须填写看板主要作用和介绍!!!!!!!!!!");
+				return false;
+			}
+			if(customers == ""){
+				alert("请添加看板参与人员!");
+				return false;
+			}
+			jQuery.ajax({
+				url:"<?php echo $kanbantijiaUrl;?>",
+				data:{"name":kenbanName,"description":kenbanrecord,"kanbanstatu":kanbanstatus,"kanbantypes":kenbantype,"kanbanlabel":kenbanlabel,"kanbanNames":customers},
+				type:"POST",
+				dataType:"json",
+				success:function(result){
+					alert(result.status);
+					window.location.reload(); 
+						}
+					});
+		});
+	});
+</script>

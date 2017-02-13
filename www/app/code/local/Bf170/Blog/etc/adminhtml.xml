@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.bf170.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@bf170.com so we can send you a copy immediately.
+ * 
+ -->
+<config>
+	<menu>
+		<blog translate="title" module="blog">
+			<title>博客管理</title>
+			<sort_order>10</sort_order>
+			<children>
+				<item_index translate="title" module="blog">
+					<title>博客信息</title>
+					<sort_order>100</sort_order>
+					<action>blog_adminhtml/article/index</action>
+				</item_index>
+			</children>
+		</blog>
+	</menu>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<blog translate="title" module="blog">
+						<title>博客管理</title>
+						<sort_order>120</sort_order>
+						<children>
+							<manage translate="title">
+								<title>管理</title>
+								<sort_order>0</sort_order>
+							</manage>
+						</children>
+					</blog>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

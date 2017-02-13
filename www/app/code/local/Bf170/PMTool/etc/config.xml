@@ -1,0 +1,92 @@
+﻿<?xml version="1.0"?>
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.bf170.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@bf170.com so we can send you a copy immediately.
+ * 
+ -->
+
+<config>
+	<modules>
+		<Bf170_PMTool>
+		   <version>1.0.0</version>
+		</Bf170_PMTool>
+	</modules>
+	<global>
+		<blocks>
+			<pmtool>
+				<class>Bf170_PMTool_Block</class>
+			</pmtool>
+		</blocks>
+		<helpers>
+			<pmtool>
+				<class>Bf170_PMTool_Helper</class>
+			</pmtool>
+		</helpers>
+		<models>
+            <pmtool>
+                <class>Bf170_PMTool_Model</class>
+                <resourceModel>pmtool_mysql4</resourceModel>
+            </pmtool>
+            <pmtool_mysql4>
+                <class>Bf170_PMTool_Model_Mysql4</class>
+                <entities>
+                    <kanban>
+                        <table>pmtool_kanban</table>
+                    </kanban>
+					<kanban_user>
+                        <table>pmtool_kanban_user</table>
+                    </kanban_user>
+					<card>
+                        <table>pmtool_card</table>
+                    </card>
+					<card_user>
+                        <table>pmtool_card_user</table>
+                    </card_user>
+                </entities>
+            </pmtool_mysql4>
+        </models>
+        <resources>
+            <pmtool_setup>
+                <setup>
+                    <module>Bf170_PMTool</module>
+                </setup>
+            </pmtool_setup>
+        </resources>
+	</global>
+	<frontend>
+		<routers>
+			<pmtool>
+				<use>standard</use>
+				<args>
+					<module>Bf170_PMTool</module>
+					<frontName>pmtool</frontName>
+				</args>
+			</pmtool>
+		</routers>
+		<layout>
+			<updates>
+				<pmtool module="Bf170_PMTool">
+					<file>pmtool.xml</file>
+				</pmtool>
+			</updates>
+		</layout>
+	</frontend>
+	<admin>
+        <routers>
+            <pmtool_adminhtml>
+                <use>admin</use>
+                <args>
+                    <module>Bf170_PMTool_Adminhtml</module>
+                    <frontName>pmtool_adminhtml</frontName>
+                </args>
+            </pmtool_adminhtml>
+        </routers>
+    </admin>
+</config>
+	

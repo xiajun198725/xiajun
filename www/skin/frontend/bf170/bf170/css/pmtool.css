@@ -1,0 +1,307 @@
+﻿/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.harapartners.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@harapartners.com so we can send you a copy immediately.
+ */
+
+
+/* ================ 看板列表页 ================ */
+
+.pmtool-kanban-list {
+    clear: both;
+    padding-top: 10px;
+}
+
+.pmtool-kanban-list li {
+    background-color: #5FCFDF;
+    color: #FFFFFF;
+    /*cursor: pointer;*/
+    float: left;
+    margin: 0 10px 10px 0;
+    padding: 15px;
+    width: 20%;
+    min-width: 200px;
+    border-radius: 5px;
+    word-wrap: break-word;
+    transition: color 300ms ease-in-out 0s, background-color 300ms;
+}
+
+.pmtool-kanban-list h1, .pmtool-kanban-list h2, .pmtool-kanban-list h3, .pmtool-kanban-list h4, .pmtool-kanban-list h5, .pmtool-kanban-list h6 {
+    color: #FFFFFF;
+}
+
+.pmtool-kanban-list li.kanban-inactive {
+    background-color: #EF8F8F;
+}
+
+.pmtool-kanban-list li.kanban-other {
+    background-color: #7F8F9F;
+}
+
+.pmtool-kanban-list li.kanban-item-additional {
+    display: none;
+}
+
+.pmtool-kanban-list li.first {
+    clear: both;
+}
+
+
+/* ================ 看板详情页 ================ */
+
+.pmtool-process-list {
+    clear: both;
+    padding-top: 10px;
+}
+
+.pmtool-process-list h1, .pmtool-process-list h2, .pmtool-process-list h3, .pmtool-process-list h4, .pmtool-process-list h5, .pmtool-process-list h6 {
+    color: #FFFFFF;
+}
+
+.pmtool-process-list .pmtool-process-title {
+    border-bottom: 2px solid;
+    margin-bottom: 5px;
+}
+
+.pmtool-card-list {
+    background-color: #CFCFDF;
+    color: #FFFFFF;
+    /*cursor: pointer;*/
+    float: left;
+    margin: 0 10px 10px 0;
+    padding: 15px;
+    width: 15%;
+    min-width: 200px;
+    min-height: 150px;
+    border-radius: 5px;
+    word-wrap: break-word;
+    transition: color 300ms ease-in-out 0s, background-color 300ms;
+}
+
+.card-container {
+    background: #5FCFDF none repeat scroll 0 0;
+    color: #FFFFFF;
+    /*cursor: pointer;*/
+    float: left;
+    margin:5px;
+    padding:5px;
+    width:93%;
+    min-width: 180px;
+    min-height: 150px;
+    border-radius: 5px;
+    word-wrap: break-word;
+    transition: color 300ms ease-in-out 0s, background-color 300ms;
+}
+.card-content {
+    width: 100%;
+    height: 150px;
+    background-color:#A4D3EE;
+}
+
+.popView-leftDiv {
+    /*position: absolute;*/
+    width: 600px;
+    height: 100%;
+    float: left;
+    /*background-color: gray;*/
+}
+
+.popView-rightDiv {
+    /*right: 0px;*/
+    /*position: absolute;*/
+    width: 140px;
+    float: right;
+    height: 100%;
+    background-color: pink;
+}
+
+.popView-btn {
+    width: 100px;
+    height: 30px;
+    margin: 5px 20px 5px 20px;
+}
+
+.popView-myInput {
+    left: 0px;
+    width: 95%;
+    margin-left: 10px;
+    height: 100px;
+}
+
+.popView-imgDiv {
+    margin-left:10px;
+    background-color: pink;
+    width: 95%;
+    height: 100px;
+}
+textarea {
+  width: 97%;
+}
+.docs-date {
+  background-color: red;
+}
+/* ================ 添加看板详情页 ================ */
+.kanbanbuju{
+    position: absolute;
+    left:30px;
+}
+.tianjiankanban {
+    height:60px;
+    width:60px;
+}
+.members_show_tianjias{
+    display:none;
+    height:500px;
+    width:600px;
+    background-color:#66cc99;
+}
+.kanban_xiangqing_biaoti{
+    float:left;
+    width: 10px;
+}
+.kanban_selected_user{
+   
+}
+/*看板看板详情的样式*/
+.kanban_xiangqing{
+    float:right;
+    position:relative;
+    left:10px;
+    overflow: hidden; /*自动隐藏文字*/
+    text-overflow: ellipsis;/*文字隐藏后添加省略号*/
+    width:95%; 
+    height:85px;
+    /*width: 20em;不允许出现半汉字截断*/
+    background-color:#00FFFF;
+}
+
+/*看板成员的样式*/
+.kanban_number_user{
+	 background-color:#47542c;
+    float: left;
+}
+
+/*添加看板的样式*/
+.shurukanban{
+    width:300px;
+    height:30px;
+    margin-left:30px;
+}
+.shurukanbantwo{
+    width:300px;
+    height:200px;
+    margin-left:30px;
+}
+.kanbanstatus{
+    position: absolute;
+    left:7px;
+}
+.kanbanstatus_select{
+    position: absolute;
+    left:99px;
+}
+.kanbanstatus_option{
+    width:60px;
+    height:30px;
+    text-align:center;
+}
+.kanbantype{
+    position: absolute;
+    left:230px;
+}
+.kanbantype_select{
+    position: absolute;
+    left:95px;
+}
+.kanbanbiaoqian{
+    position: absolute;
+    left:250px;
+}
+.kanbanbiaoqian_select{
+    position: absolute;
+    left:190px;
+    top:-250px;
+}
+.kanbantype_option{
+    width:60px;
+    height:30px;
+    text-align :center;
+}
+.kanbanbiaoqian_option{
+    width:50px;
+    height:26px;
+}
+.buttontijiao{
+    position: absolute;
+    left:440px;
+}
+.kanbanrenyuan_select{
+     position: absolute;
+    left:190px;
+    top:-210px;
+    background-color:#ffffff;
+    width:80px;
+    height:300px;
+}
+.customernames{
+  display: none;
+   float:left;
+   margin-left:12px;
+}
+.quxiaofudong{
+   clear: both;
+}
+.kapian_tianjia{
+     display:none;
+    height:550px;
+    width:600px;
+    background-color:#66cc99;
+}
+.h2_kapian{
+
+}
+.input_kapian{
+    width:350px;
+    height:30px;
+    margin-left:30px;
+}
+.input_kapian_textarea{
+    width:350px;
+    height:200px;
+    margin-left:30px;
+}
+.h2_kapian_biaoqiao{
+    float:left;
+    margin-left:68px;
+}
+.kapiantype_select{
+    margin-left: 20px;
+}
+.kapianscustomernames{
+    margin-left:68px;
+}
+.kapiancustomernames{
+    clear: both;
+}
+.kapiancustomername{
+    float: left;
+    width: 60px;
+    height: 20px;
+}
+.user_name{
+    float: left;
+    border: 1px solid #B0E0E6;
+    background-color:#66CD00; 
+}
+.user_name_clear{
+    clear: both;
+}
+/*卡片时间倒计时的样式*/
+.kapian_times_xianzhi{
+    background-color:#87CEFA; 
+}

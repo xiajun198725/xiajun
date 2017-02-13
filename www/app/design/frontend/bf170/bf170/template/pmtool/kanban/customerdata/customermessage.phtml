@@ -1,0 +1,14 @@
+<?php
+$recordCols = $this->getkanbanCustoerDataCollection();
+?>
+<h1>所有看板成员:</h1>
+<?php foreach($recordCols as $recordCol):?>
+<?php $customer = Mage::getModel('customer/customer')->load($recordCol);?>
+	<ol>
+		<li style="float:left;" >
+			<div style= "height:15px;width:40px;background-color:#66cc99;">
+				<h6><?php  echo $customer->getFirstname();?></h6>
+			</div>
+		</li>
+	</ol>
+<?php endforeach;?>

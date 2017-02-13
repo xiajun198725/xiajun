@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.bf170.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@bf170.com so we can send you a copy immediately.
+ * 
+ -->
+ <config>
+	<sections>
+		<pmtool translate="label" module="pmtool">
+			<label>高级管理</label>
+			<tab>coreservice</tab>
+			<frontend_type>text</frontend_type>
+			<sort_order>500</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>0</show_in_website>
+			<show_in_store>0</show_in_store>
+			<groups>
+				<general translate="label" module="pmtool">
+					<label>高级管理员设定</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>2</sort_order>
+					<show_in_default>2</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+					<fields>
+						<is_enabled>
+							<label>是否启用</label>
+							<frontend_type>select</frontend_type>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+							<sort_order>100</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+						</is_enabled>
+						<kanban_senior_manager_id translate="label">
+							<label>高级管理员ID</label>
+							<frontend_type>text</frontend_type>
+							<sort_order>110</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>0</show_in_website>
+							<show_in_store>0</show_in_store>
+							<comment><![CDATA[]]></comment>
+						</kanban_senior_manager_id>
+					</fields>
+				</general>
+			</groups>
+		</pmtool>
+	</sections>
+</config>

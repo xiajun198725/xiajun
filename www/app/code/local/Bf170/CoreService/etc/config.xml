@@ -1,0 +1,132 @@
+﻿<?xml version="1.0"?>
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.bf170.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@bf170.com so we can send you a copy immediately.
+ * 
+ -->
+<config>
+    <modules>
+        <Bf170_CoreService>
+            <version>1.0.0</version>
+        </Bf170_CoreService>
+    </modules>
+    <global>
+		<blocks>
+			<coreservice>
+            	<class>Bf170_CoreService_Block</class>
+            </coreservice>
+		</blocks>
+        <helpers>
+            <coreservice>
+            	<class>Bf170_CoreService_Helper</class>
+            </coreservice>
+        </helpers>
+		<models>
+			<coreservice>
+				<class>Bf170_CoreService_Model</class>
+			</coreservice>
+		</models>
+		<resources>
+            <coreservice_setup>
+                <setup>
+                    <module>Bf170_CoreService</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </coreservice_setup>
+        </resources>
+    </global>
+	<frontend>
+        <routers>
+            <coreservice>
+                <use>standard</use>
+                <args>
+                    <module>Bf170_CoreService</module>
+                    <frontName>coreservice</frontName>
+                </args>
+            </coreservice>
+        </routers>
+    </frontend>
+	<admin>
+	    <routers>
+            <coreservice_adminhtml>
+                <use>admin</use>
+                <args>
+                    <module>Bf170_CoreService_Adminhtml</module>
+                    <frontName>coreservice_adminhtml</frontName>
+                </args>
+            </coreservice_adminhtml>
+		</routers>
+	</admin>
+	<adminhtml>
+		<events>
+			<core_block_abstract_to_html_after>
+				<!-- 添加JsonConfigWidget所需的相应JS和CSS -->
+                <observers>
+                    <coreservice_adminhtml_only_add_json_config_widget>
+                        <type>singleton</type>
+                        <class>coreservice/observer_jsonconfigwidget</class>
+                        <method>adminhtmlOnlyAddJsonConfigWidget</method>
+                    </coreservice_adminhtml_only_add_json_config_widget>
+                </observers>
+            </core_block_abstract_to_html_after>
+		</events>
+	</adminhtml>
+	<stores>
+        <admin>
+            <design>
+                <theme>
+					<layout>bf170</layout>
+					<template>bf170</template>
+					<skin>bf170</skin>
+					<locale>bf170</locale>
+                </theme>
+            </design>
+        </admin>
+    </stores>
+	<default>
+		<general>
+			<country>
+				<default>CN</default>
+				<allow>CN,MO,HK</allow>
+			</country>
+		</general>
+		<customer>
+			<account_share>
+				<!-- 用户不按照网站进行限制，全局可用 -->
+				<scope>0</scope>
+			</account_share>
+		</customer>
+		<design>
+			<package>
+				<name>bf170</name>
+			</package>
+			<theme>
+				<locale>bf170</locale>
+				<template>bf170</template>
+				<skin>bf170</skin>
+				<layout>bf170</layout>
+				<default>default</default>
+			</theme>
+			<head>
+				<default_title><![CDATA[暴蜂蜜蚂]]></default_title>
+				<default_description><![CDATA[暴蜂蜜蚂]]></default_description>
+				<default_keywords><![CDATA[暴蜂蜜蚂]]></default_keywords>
+			</head>
+			<header>
+				<logo_alt><![CDATA[暴蜂蜜蚂]]></logo_alt>
+				<welcome><![CDATA[暴蜂蜜蚂欢迎您]]></welcome>
+			</header>
+			<footer>
+				<copyright><![CDATA[&copy; 2016 暴蜂蜜蚂 版权所有]]></copyright>
+			</footer>
+		</design>
+	</default>
+</config>

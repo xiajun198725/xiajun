@@ -1,0 +1,82 @@
+﻿<?xml version="1.0"?>
+<!--
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the End User Software Agreement (EULA).
+ * It is also available through the world-wide-web at this URL:
+ * http://www.bf170.com/license
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to eula@bf170.com so we can send you a copy immediately.
+ * 
+ -->
+<config>
+	<modules>
+		<Bf170_UserAccess>
+			<version>1.0.0</version>
+		</Bf170_UserAccess>
+	</modules>
+	<global>
+		<blocks>
+			<useraccess>
+				<class>Bf170_UserAccess_Block</class>
+			</useraccess>
+		</blocks>
+		<helpers>
+			<useraccess>
+				<class>Bf170_UserAccess_Helper</class>
+			</useraccess>
+		</helpers>
+		<models>
+			<useraccess>
+				<class>Bf170_UserAccess_Model</class>
+			</useraccess>
+			<admin>
+				<rewrite>
+					<user>Bf170_UserAccess_Model_Rewrite_Admin_User</user>
+				</rewrite>
+			</admin>
+			<customer>
+				<rewrite>
+					<customer>Bf170_UserAccess_Model_Rewrite_Customer_Customer</customer>
+				</rewrite>
+			</customer>
+			<customer_resource>
+				<rewrite>
+					<customer>Bf170_UserAccess_Model_Rewrite_Customer_Resource_Customer</customer>
+				</rewrite>
+			</customer_resource>
+		</models>
+	</global>
+	<frontend>
+		<secure_url>
+			<useraccess>/useraccess/</useraccess>
+		</secure_url>
+		<routers>
+			<customer>
+				<args>
+					<modules>
+						<Bf170_UserAccess before="Mage_Customer">Bf170_UserAccess_Customer</Bf170_UserAccess>
+					</modules>
+				</args>
+			</customer>
+			<useraccess>
+				<use>standard</use>
+				<args>
+					<module>Bf170_UserAccess</module>
+					<frontName>useraccess</frontName>
+				</args>
+			</useraccess>
+		</routers>
+		<events>
+			<controller_action_predispatch>
+				<observers>
+					<useraccess_restrict_website_access>
+						<class>useraccess/observer</class>
+						<method>restrictWebsiteAccess</method>
+					</useraccess_restrict_website_access>
+				</observers>
+			</controller_action_predispatch>
+		</events>
+	</frontend>
+</config>
